@@ -1,5 +1,14 @@
-{% extends "base.html" %}
+{% extends "base_outer.html" %}
 
 {% block content %}
-	<a href="{% url 'social:begin' 'google-oauth2' %}">Login With Google</a>
+	{% load staticfiles %}
+	<div class="units-row login">
+		<div class="unit-centered unit-30">
+			<img class="logo" src="{% static "img/logo.png" %}"/>
+			<p>Connect with your colleagues</p>
+			<a class="login-button" href="{% url 'social:begin' 'google-oauth2' %}">
+				<img src="{% static "img/google-logo.png" %}"/>Login with Google
+			</a>
+		</div>
+	</div>
 {% endblock %}

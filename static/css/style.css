@@ -1,0 +1,45 @@
+body,
+html {
+	font-family: 'Open Sans', sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font-family: 'Merriweather', serif;
+}
+
+.outer {
+	background-color: #333;
+	color: #fff;
+}
+
+.login {
+	text-align: center;
+	padding: 100px 0;
+}
+
+.login a {
+	color: #fff;
+	text-decoration: none;
+}
+
+.logo {
+	margin-bottom: 30px;
+}
+
+.login-button {
+	background: black;
+	padding: 20px 0;
+	display: block;
+	width: 100%;
+	border-radius: 5px;
+}
+
+.login-button img {
+	max-width: 30px;
+	margin-right: 10px;
+}
