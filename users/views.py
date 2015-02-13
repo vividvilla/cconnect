@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 
 from django.http import HttpResponse
 
-from forms import UserBasicProfileForm
+from forms import UserBasicProfileForm, UserCompanyInfoForm, UserLinksForm
 # Create your views here.
 
 def index(request):
@@ -35,17 +35,37 @@ def edit_profile(request):
 			'last_name': user.last_name
 		})
 
+	if hasattr(user, 'userprofile'):
+		company_info_form = UserCompanyInfoForm(initial={
+			'personal_email': user.userprofile.personal_email,
+			'designation': user.userprofile.designation,
+			'department': user.userprofile.department
+		})
+	else:
+		company_info_form = UserCompanyInfoForm()
+
+	add_link_form = UserLinksForm()
+	user_links = user.userlink_set.all()
+
 	if 'basic_profile_form' in request.POST:
-		print 'submitted'
 		basic_profile_form = UserBasicProfileForm(request.POST)
 		if basic_profile_form.is_valid():
-			return HttpResponse("updated")
-		else:
-			print 'invalid', basic_profile_form.errors
+			return HttpResponse('updated')
+
+	if 'company_info_form' in request.POST:
+		company_info_form = UserCompanyInfoForm(request.POST)
+		if company_info_form.is_valid():
+			return HttpResponse('updated company info')
+
+	if 'add_link_form' in request.POST:
+		if add_link_form.is_valid():
+			return HttpResponse('added link')
 
 	return render(request, 'users/edit_profile.html', {
 		'basic_profile_form' : basic_profile_form,
-		'user' : user
+		'company_info_form' : company_info_form,
+		'user' : user,
+		'links' : user_links
 		})
 
 @login_required

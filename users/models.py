@@ -7,11 +7,14 @@ class Department(models.Model):
 	created = models.DateTimeField(auto_now_add=True)
 	updated = models.DateTimeField(auto_now=True)
 
+	def __unicode__(self):
+		return self.name
+
 class UserProfile(models.Model):
-	user = models.ForeignKey(User, unique=True)
-	personal_email = models.EmailField(max_length=224, null=True, blank=True)
+	user = models.OneToOneField(User, primary_key=True)
 	department = models.ForeignKey(Department)
-	position = models.CharField(max_length=100)
+	personal_email = models.EmailField(max_length=224, null=True, blank=True)
+	designation = models.CharField(max_length=100, null=True, blank=True)
 	updated = models.DateTimeField(auto_now=True)
 
 class UserLink(models.Model):

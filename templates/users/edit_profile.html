@@ -1,28 +1,75 @@
 {% extends "base.html" %}
 
 {% block content %}
-	<form action="." method="post" class="forms">
+	{% load widget_tweaks %}
+	<div class="units-row">
+	<div class="">
+		profile pic
+	</div>
+	<div class="units-row">
+		<form action="." method="post" class="forms">
+			<fieldset>
+				<legend>Basic details</legend>
+				{% csrf_token %}
+
+				{{ basic_profile_form.non_field_errors }}
+
+				{% with WIDGET_ERROR_CLASS='input-error' %}
+				<label>
+					{{ basic_profile_form.username.label }} <span class="error">{{ basic_profile_form.username.errors | join:", " }}</span>
+					{% render_field basic_profile_form.username class="width-100" %}
+				</label>
+				<label>
+					{{ basic_profile_form.first_name.label }} <span class="error">{{ basic_profile_form.first_name.errors | join:", " }}</span>
+					{% render_field basic_profile_form.first_name class="width-100" %}
+				</label>
+				<label>
+					{{ basic_profile_form.last_name.label }} <span class="error">{{ basic_profile_form.last_name.errors | join:", " }}</span>
+					{% render_field basic_profile_form.last_name class="width-100" %}
+				</label>
+				{% endwith %}
+				<label>
+					Email
+					<input class="width-100" disabled id="id_email" name="email" type="email" value="{{ user.email }}">
+				</label>
+				<button class="btn btn-blue" type="submit" name="basic_profile_form" />Update</button>
+			</fieldset>
+		</form>
+
+		<form action="." method="POST" class="forms">
 			{% csrf_token %}
-			{% load widget_tweaks %}
+			{{ company_info_form.non_field_errors }}
+			<fieldset>
+				<legend>Company details</legend>
+					{% with WIDGET_ERROR_CLASS='input-error' %}
+						<label>
+							{{ company_info_form.personal_email.label }} <span class="error">{{ company_info_form.personal_email.errors | join:", " }}</span>
+							{% render_field company_info_form.personal_email class="width-100" %}
+						</label>
+						<label>
+							{{ company_info_form.designation.label }} <span class="error">{{ company_info_form.designation.errors | join:", " }}</span>
+							{% render_field company_info_form.designation class="width-100" %}
+						</label>
+						<label>
+							{{ company_info_form.department.label }} <span class="error">{{ company_info_form.department.errors | join:", " }}</span>
+							{% render_field company_info_form.department class="width-100" %}
+						</label>
+					{% endwith %}
+					<button class="btn btn-blue" type="submit" name="company_info_form" />Update</button>
+			</fieldset>
+		</form>
 
-			{{ basic_profile_form.non_field_errors }}
-
-			<label>
-				{{ basic_profile_form.username.label }} <span class="error">{{ basic_profile_form.username.errors | join:", " }}</span>
-				{% render_field basic_profile_form.username class="width-50" %}
-			</label>
-			<label>
-				{{ basic_profile_form.first_name.label }} <span class="error">{{ basic_profile_form.first_name.errors | join:", " }}</span>
-				{% render_field basic_profile_form.first_name class="width-50" %}
-			</label>
-			<label>
-				{{ basic_profile_form.last_name.label }} <span class="error">{{ basic_profile_form.last_name.errors | join:", " }}</span>
-				{% render_field basic_profile_form.last_name class="width-50" %}
-			</label>
-			<label>
-				Email
-				<input class="width-50" disabled id="id_email" name="email" type="email" value="{{ user.email }}">
-			</label>
-			<button class="btn btn-blue" type="submit" name="basic_profile_form" />Update</button>
-	</form>
+		<div class="user-links">
+			<ul>
+			{% for link in links %}
+				<li>
+					<a class="{{ link.name }}" href="{{ link.url }}">{{ link.name }}</a>
+				</li>
+			{% endfor %}
+			</ul>
+			{% if not links %}
+				No links added yet
+			{% endif %}
+		</div>
+	</div>
 {% endblock %}
