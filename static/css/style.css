@@ -43,3 +43,22 @@ h6 {
 	max-width: 30px;
 	margin-right: 10px;
 }
+
+
+
+/* Header */
+
+header {
+	background: #f1f1f1;
+	padding: 5px 40px;
+}
+
+.primary-nav {
+	margin-bottom: 0;
+}
+
+/* Main */
+
+.main {
+	padding: 20px 40px;
+}

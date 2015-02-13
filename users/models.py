@@ -9,6 +9,7 @@ class Department(models.Model):
 
 class UserProfile(models.Model):
 	user = models.ForeignKey(User, unique=True)
+	personal_email = models.EmailField(max_length=224, null=True, blank=True)
 	department = models.ForeignKey(Department)
 	position = models.CharField(max_length=100)
 	updated = models.DateTimeField(auto_now=True)

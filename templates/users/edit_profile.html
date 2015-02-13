@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<form action="." method="post" class="forms">
+			{% csrf_token %}
+			{% load widget_tweaks %}
+
+			{{ basic_profile_form.non_field_errors }}
+
+			<label>
+				{{ basic_profile_form.username.label }} <span class="error">{{ basic_profile_form.username.errors | join:", " }}</span>
+				{% render_field basic_profile_form.username class="width-50" %}
+			</label>
+			<label>
+				{{ basic_profile_form.first_name.label }} <span class="error">{{ basic_profile_form.first_name.errors | join:", " }}</span>
+				{% render_field basic_profile_form.first_name class="width-50" %}
+			</label>
+			<label>
+				{{ basic_profile_form.last_name.label }} <span class="error">{{ basic_profile_form.last_name.errors | join:", " }}</span>
+				{% render_field basic_profile_form.last_name class="width-50" %}
+			</label>
+			<label>
+				Email
+				<input class="width-50" disabled id="id_email" name="email" type="email" value="{{ user.email }}">
+			</label>
+			<button class="btn btn-blue" type="submit" name="basic_profile_form" />Update</button>
+	</form>
+{% endblock %}
