@@ -62,3 +62,10 @@ header {
 .main {
 	padding: 20px 40px;
 }
+
+.add-links label,
+.add-phones label {
+	margin: 0 !important;
+	padding: 0;
+	margin-right: 2% !important;
+}

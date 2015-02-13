@@ -10,10 +10,14 @@ class UserBasicProfileForm(forms.Form):
 		message='Invalid username', code='Invalid username')])
 
 class UserCompanyInfoForm(forms.Form):
-	personal_email = forms.EmailField(label="Personal email")
-	designation = forms.CharField(label="Designation")
-	department = forms.ModelChoiceField(queryset=Department.objects.all())
+	personal_email = forms.EmailField(label="Personal email", required=False)
+	designation = forms.CharField(label="Designation", required=False)
+	department = forms.ModelChoiceField(queryset=Department.objects.all(), required=False)
 
 class UserLinksForm(forms.Form):
 	name = forms.CharField(label="Name")
 	url = forms.URLField(label="URL")
+
+class UserPhoneForm(forms.Form):
+	phone = forms.RegexField(regex=r'^\+?1?\d{10,10}$',
+		error_message = ("Phone number must be 10 digits only."))

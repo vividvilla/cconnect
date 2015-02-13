@@ -70,6 +70,64 @@
 			{% if not links %}
 				No links added yet
 			{% endif %}
+
+			<form class="forms units-row add-links" action="." method="POST">
+				{% csrf_token %}
+				{% with WIDGET_ERROR_CLASS='input-error' %}
+				<fieldset>
+					<legend>Add link</legend>
+					<label class="unit-40">
+						{% render_field add_link_form.name class="width-100" placeholder=add_link_form.name.label%}
+						<div class="error">{{ add_link_form.name.errors | join:", " }}</div>
+					</label>
+					<label class="unit-40">
+						{% render_field add_link_form.url class="width-100" placeholder=add_link_form.url.label%}
+						<div class="error">{{ add_link_form.url.errors | join:", " }}</div>
+					</label>
+					<label class="unit-20">
+						<button class="btn btn-blue" type="submit" name="add_link_form" />Add</button>
+					</label>
+
+					<div class="error">
+						{{ add_link_form.non_field_errors }}
+					</div>
+				</fieldset>
+				{% endwith %}
+			</form>
 		</div>
+
+		<div class="user-phones">
+			<ul>
+			{% for phone in phones %}
+				<li>
+					{{ phone.phone }}
+				</li>
+			{% endfor %}
+			</ul>
+			{% if not phones %}
+				No phone no. added yet
+			{% endif %}
+
+			<form class="forms units-row add-phones" action="." method="POST">
+				{% csrf_token %}
+				{% with WIDGET_ERROR_CLASS='input-error' %}
+				<fieldset>
+					<legend>Add Phone number</legend>
+					<label class="unit-75">
+						{% render_field add_phone_form.phone class="width-100" placeholder=add_phone_form.phone.label%}
+						<div class="error">{{ add_phone_form.phone.errors | join:", " }}</div>
+					</label>
+					<label class="unit-20">
+						<button class="btn btn-blue" type="submit" name="add_phone_form" />Add</button>
+					</label>
+
+					<div class="error">
+						{{ add_phone_form.non_field_errors }}
+					</div>
+				</fieldset>
+				{% endwith %}
+			</form>
+		</div>
+
 	</div>
 {% endblock %}

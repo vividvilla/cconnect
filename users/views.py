@@ -4,7 +4,8 @@ from django.contrib.auth.decorators import login_required
 
 from django.http import HttpResponse
 
-from forms import UserBasicProfileForm, UserCompanyInfoForm, UserLinksForm
+from forms import UserBasicProfileForm, UserCompanyInfoForm, \
+	UserLinksForm, UserPhoneForm
 # Create your views here.
 
 def index(request):
@@ -23,7 +24,7 @@ def home(request):
 
 @login_required
 def profile(request):
-	pass
+	return HttpResponse('welcome')
 
 @login_required
 def edit_profile(request):
@@ -35,17 +36,19 @@ def edit_profile(request):
 			'last_name': user.last_name
 		})
 
-	if hasattr(user, 'userprofile'):
+	if hasattr(user, 'profile'):
 		company_info_form = UserCompanyInfoForm(initial={
-			'personal_email': user.userprofile.personal_email,
-			'designation': user.userprofile.designation,
-			'department': user.userprofile.department
+			'personal_email': user.profile.personal_email,
+			'designation': user.profile.designation,
+			'department': user.profile.department
 		})
 	else:
 		company_info_form = UserCompanyInfoForm()
 
 	add_link_form = UserLinksForm()
-	user_links = user.userlink_set.all()
+	user_links = user.link_set.all()
+	add_phone_form = UserPhoneForm()
+	user_phones = user.phone_set.all()
 
 	if 'basic_profile_form' in request.POST:
 		basic_profile_form = UserBasicProfileForm(request.POST)
@@ -58,14 +61,24 @@ def edit_profile(request):
 			return HttpResponse('updated company info')
 
 	if 'add_link_form' in request.POST:
+		add_link_form = UserLinksForm(request.POST)
 		if add_link_form.is_valid():
 			return HttpResponse('added link')
+
+
+	if 'add_phone_form' in request.POST:
+		add_phone_form = UserPhoneForm(request.POST)
+		if add_phone_form.is_valid():
+			return HttpResponse('added phone number')
 
 	return render(request, 'users/edit_profile.html', {
 		'basic_profile_form' : basic_profile_form,
 		'company_info_form' : company_info_form,
+		'add_link_form' : add_link_form,
+		'add_phone_form' : add_phone_form,
 		'user' : user,
-		'links' : user_links
+		'links' : user_links,
+		'phones' : user_phones
 		})
 
 @login_required

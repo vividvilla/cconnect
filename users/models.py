@@ -10,25 +10,23 @@ class Department(models.Model):
 	def __unicode__(self):
 		return self.name
 
-class UserProfile(models.Model):
+class Profile(models.Model):
 	user = models.OneToOneField(User, primary_key=True)
-	department = models.ForeignKey(Department)
+	bio = models.TextField(null=True, blank=True)
 	personal_email = models.EmailField(max_length=224, null=True, blank=True)
+	department = models.ForeignKey(Department, null=True, blank=True)
 	designation = models.CharField(max_length=100, null=True, blank=True)
 	updated = models.DateTimeField(auto_now=True)
 
-class UserLink(models.Model):
+class Link(models.Model):
 	user = models.ForeignKey(User)
 	name = models.CharField(max_length=20)
 	url = models.URLField()
 	created = models.DateTimeField(auto_now_add = True)
 	updated = models.DateTimeField(auto_now = True)
 
-class UserPhone(models.Model):
+class Phone(models.Model):
 	user = models.ForeignKey(User)
-	phone = models.IntegerField(max_length=10, unique=True,
-		validators=[RegexValidator(regex='^\d{10}$',
-			message='Invalid phone number',
-			code='Invalid number')])
+	phone = models.CharField(max_length=10)
 	created = models.DateTimeField(auto_now_add = True)
 	updated = models.DateTimeField(auto_now = True)
