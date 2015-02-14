@@ -6,7 +6,7 @@ from django.http import HttpResponse
 
 from forms import UserBasicProfileForm, UserCompanyInfoForm, \
 	UserLinksForm, UserPhoneForm
-# Create your views here.
+from controller import UserController
 
 def index(request):
 	if request.user.is_authenticated():
@@ -29,6 +29,8 @@ def profile(request):
 @login_required
 def edit_profile(request):
 	user = request.user
+	controller = UserController(user)
+
 	basic_profile_form = UserBasicProfileForm(initial={
 			'username': user.username,
 			'email': user.email,
@@ -53,22 +55,25 @@ def edit_profile(request):
 	if 'basic_profile_form' in request.POST:
 		basic_profile_form = UserBasicProfileForm(request.POST)
 		if basic_profile_form.is_valid():
+			controller.update_profile(request.POST)
 			return HttpResponse('updated')
 
 	if 'company_info_form' in request.POST:
 		company_info_form = UserCompanyInfoForm(request.POST)
 		if company_info_form.is_valid():
+			controller.update_company_info(request.POST)
 			return HttpResponse('updated company info')
 
 	if 'add_link_form' in request.POST:
 		add_link_form = UserLinksForm(request.POST)
 		if add_link_form.is_valid():
+			controller.add_link(request.POST)
 			return HttpResponse('added link')
-
 
 	if 'add_phone_form' in request.POST:
 		add_phone_form = UserPhoneForm(request.POST)
 		if add_phone_form.is_valid():
+			controller.add_phone(request.POST)
 			return HttpResponse('added phone number')
 
 	return render(request, 'users/edit_profile.html', {
