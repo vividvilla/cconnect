@@ -1,69 +1,77 @@
 {% extends "base.html" %}
+{% block body-class %}edit-profile{% endblock %}
 
 {% block content %}
 	{% load widget_tweaks %}
-	<div class="units-row">
-	<div class="">
-		profile pic
-	</div>
-	<div class="units-row">
+	{% if success %}
+		<div class="tools-alert tools-alert-green smaller">
+			Profile has been successfully updated.
+		</div>
+	{% endif %}
+	<nav class="nav-tabs" data-tools="tabs" data-equals="true">
+			<ul>
+					<li class="basic-profile"><a href="#basic-profile">Basic-profile</a></li>
+					<li class="company-profile"><a href="#company-profile">Company info</a></li>
+					<li class="social-links"><a href="#social-links">Links</a></li>
+					<li class="phone-no"><a href="#phone-no">Phone</a></li>
+			</ul>
+	</nav>
+
+	<div id="basic-profile">
 		<form action="." method="post" class="forms">
-			<fieldset>
-				<legend>Basic details</legend>
-				{% csrf_token %}
+			{% csrf_token %}
 
-				{{ basic_profile_form.non_field_errors }}
+			{{ basic_profile_form.non_field_errors }}
 
-				{% with WIDGET_ERROR_CLASS='input-error' %}
-				<label>
-					{{ basic_profile_form.username.label }} <span class="error">{{ basic_profile_form.username.errors | join:", " }}</span>
-					{% render_field basic_profile_form.username class="width-100" %}
-				</label>
-				<label>
-					{{ basic_profile_form.first_name.label }} <span class="error">{{ basic_profile_form.first_name.errors | join:", " }}</span>
-					{% render_field basic_profile_form.first_name class="width-100" %}
-				</label>
-				<label>
-					{{ basic_profile_form.last_name.label }} <span class="error">{{ basic_profile_form.last_name.errors | join:", " }}</span>
-					{% render_field basic_profile_form.last_name class="width-100" %}
-				</label>
-				{% endwith %}
-				<label>
-					Email
-					<input class="width-100" disabled id="id_email" name="email" type="email" value="{{ user.email }}">
-				</label>
-				<button class="btn btn-blue" type="submit" name="basic_profile_form" />Update</button>
-			</fieldset>
+			{% with WIDGET_ERROR_CLASS='input-error' %}
+			<label>
+				{{ basic_profile_form.username.label }} <span class="error">{{ basic_profile_form.username.errors | join:", " }}</span>
+				{% render_field basic_profile_form.username class="width-50" %}
+			</label>
+			<label>
+				{{ basic_profile_form.first_name.label }} <span class="error">{{ basic_profile_form.first_name.errors | join:", " }}</span>
+				{% render_field basic_profile_form.first_name class="width-50" %}
+			</label>
+			<label>
+				{{ basic_profile_form.last_name.label }} <span class="error">{{ basic_profile_form.last_name.errors | join:", " }}</span>
+				{% render_field basic_profile_form.last_name class="width-50" %}
+			</label>
+			{% endwith %}
+			<label>
+				Email
+				<input class="width-50" disabled id="id_email" name="email" type="email" value="{{ user.email }}">
+			</label>
+			<button class="btn btn-blue" type="submit" name="basic_profile_form" />Update</button>
 		</form>
-
+	</div>
+	<div id="company-profile">
 		<form action="." method="POST" class="forms">
 			{% csrf_token %}
 			{{ company_info_form.non_field_errors }}
-			<fieldset>
-				<legend>Company details</legend>
-					{% with WIDGET_ERROR_CLASS='input-error' %}
-						<label>
-							{{ company_info_form.personal_email.label }} <span class="error">{{ company_info_form.personal_email.errors | join:", " }}</span>
-							{% render_field company_info_form.personal_email class="width-100" %}
-						</label>
-						<label>
-							{{ company_info_form.designation.label }} <span class="error">{{ company_info_form.designation.errors | join:", " }}</span>
-							{% render_field company_info_form.designation class="width-100" %}
-						</label>
-						<label>
-							{{ company_info_form.department.label }} <span class="error">{{ company_info_form.department.errors | join:", " }}</span>
-							{% render_field company_info_form.department class="width-100" %}
-						</label>
-					{% endwith %}
-					<button class="btn btn-blue" type="submit" name="company_info_form" />Update</button>
-			</fieldset>
+				{% with WIDGET_ERROR_CLASS='input-error' %}
+					<label>
+						{{ company_info_form.personal_email.label }} <span class="error">{{ company_info_form.personal_email.errors | join:", " }}</span>
+						{% render_field company_info_form.personal_email class="width-50" %}
+					</label>
+					<label>
+						{{ company_info_form.designation.label }} <span class="error">{{ company_info_form.designation.errors | join:", " }}</span>
+						{% render_field company_info_form.designation class="width-50" %}
+					</label>
+					<label>
+						{{ company_info_form.department.label }} <span class="error">{{ company_info_form.department.errors | join:", " }}</span>
+						{% render_field company_info_form.department class="width-50" %}
+					</label>
+				{% endwith %}
+				<button class="btn btn-blue" type="submit" name="company_info_form" />Update</button>
 		</form>
-
+	</div>
+	<div id="social-links">
 		<div class="user-links">
 			<ul>
+			<h4>Current links</h4>
 			{% for link in links %}
 				<li>
-					<a class="{{ link.name }}" href="{{ link.url }}">{{ link.name }}</a>
+					<a class="{{ link.name }}" href="{{ link.url }}">{{ link.name }} <span class="smaller url">({{ link.url }})</span></a>
 				</li>
 			{% endfor %}
 			</ul>
@@ -76,15 +84,15 @@
 				{% with WIDGET_ERROR_CLASS='input-error' %}
 				<fieldset>
 					<legend>Add link</legend>
-					<label class="unit-40">
-						{% render_field add_link_form.name class="width-100" placeholder=add_link_form.name.label%}
-						<div class="error">{{ add_link_form.name.errors | join:", " }}</div>
+					<label>
+						Name <span class="error">{{ add_link_form.name.errors | join:", " }}</span>
+						{% render_field add_link_form.name class="width-100" %}
 					</label>
-					<label class="unit-40">
-						{% render_field add_link_form.url class="width-100" placeholder=add_link_form.url.label%}
-						<div class="error">{{ add_link_form.url.errors | join:", " }}</div>
+					<label>
+						URL <span class="error">{{ add_link_form.url.errors | join:", " }}</span>
+						{% render_field add_link_form.url class="width-100" %}
 					</label>
-					<label class="unit-20">
+					<label>
 						<button class="btn btn-blue" type="submit" name="add_link_form" />Add</button>
 					</label>
 
@@ -95,8 +103,10 @@
 				{% endwith %}
 			</form>
 		</div>
-
+	</div>
+	<div id="phone-no">
 		<div class="user-phones">
+			<h4>Current phone numbers</h4>
 			<ul>
 			{% for phone in phones %}
 				<li>
@@ -113,11 +123,11 @@
 				{% with WIDGET_ERROR_CLASS='input-error' %}
 				<fieldset>
 					<legend>Add Phone number</legend>
-					<label class="unit-75">
-						{% render_field add_phone_form.phone class="width-100" placeholder=add_phone_form.phone.label%}
+					<label class="unit-90">
+						{% render_field add_phone_form.phone class="width-90" placeholder=add_phone_form.phone.label%}
 						<div class="error">{{ add_phone_form.phone.errors | join:", " }}</div>
 					</label>
-					<label class="unit-20">
+					<label class="unit-10">
 						<button class="btn btn-blue" type="submit" name="add_phone_form" />Add</button>
 					</label>
 
@@ -128,6 +138,16 @@
 				{% endwith %}
 			</form>
 		</div>
-
 	</div>
+
+	<script>
+		$(document).ready(function() {
+			{% if anchor %}
+				var anchor = '{{ anchor }}'.slice(1);
+			{% else %}
+				var anchor = 'basic-profile';
+			{% endif %}
+			$('.'+anchor).addClass('active');
+		});
+	</script>
 {% endblock %}

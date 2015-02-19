@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>{% block title%}Colleagues Connect{% endblock %}</title>
+    <title>{% block title %}Colleagues Connect{% endblock %}</title>
 
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -16,12 +16,12 @@
     <script src="{% static "js/kube.min.js" %}"></script>
     <script src="{% static "js/custom.js" %}"></script>
 </head>
-<body>
+<body class="{% block body-class %}{% endblock %}" onload="{% block body-load %}{% endblock %}">
 	<header class="units-row end">
-		<div class="title unit-10">
+		<div class="site-title">
 			CC
 		</div>
-		<nav class="primary-nav navbar unit-90">
+		<nav class="primary-nav navbar nav-fullwidth">
 			<ul>
 				<li><a href="/home">Home</a></li>
 				<li><a href="/profile">Profile</a></li>

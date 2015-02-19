@@ -30,6 +30,8 @@ def profile(request):
 def edit_profile(request):
 	user = request.user
 	controller = UserController(user)
+	anchor = ''
+	success = False
 
 	basic_profile_form = UserBasicProfileForm(initial={
 			'username': user.username,
@@ -53,28 +55,32 @@ def edit_profile(request):
 	user_phones = user.phone_set.all()
 
 	if 'basic_profile_form' in request.POST:
+		anchor = '#basic-profile'
 		basic_profile_form = UserBasicProfileForm(request.POST)
 		if basic_profile_form.is_valid():
+			success = True
 			controller.update_profile(request.POST)
-			return HttpResponse('updated')
 
 	if 'company_info_form' in request.POST:
+		anchor = '#company-profile'
 		company_info_form = UserCompanyInfoForm(request.POST)
 		if company_info_form.is_valid():
+			success = True
 			controller.update_company_info(request.POST)
-			return HttpResponse('updated company info')
 
 	if 'add_link_form' in request.POST:
+		anchor = '#social-links'
 		add_link_form = UserLinksForm(request.POST)
 		if add_link_form.is_valid():
+			success = True
 			controller.add_link(request.POST)
-			return HttpResponse('added link')
 
 	if 'add_phone_form' in request.POST:
+		anchor = '#phone-no'
 		add_phone_form = UserPhoneForm(request.POST)
 		if add_phone_form.is_valid():
+			success = True
 			controller.add_phone(request.POST)
-			return HttpResponse('added phone number')
 
 	return render(request, 'users/edit_profile.html', {
 		'basic_profile_form' : basic_profile_form,
@@ -83,8 +89,10 @@ def edit_profile(request):
 		'add_phone_form' : add_phone_form,
 		'user' : user,
 		'links' : user_links,
-		'phones' : user_phones
-		})
+		'phones' : user_phones,
+		'anchor' : anchor,
+		'success' : success
+	})
 
 @login_required
 def signout(request):
