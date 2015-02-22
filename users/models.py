@@ -16,6 +16,8 @@ class Profile(models.Model):
 	personal_email = models.EmailField(max_length=224, null=True, blank=True)
 	department = models.ForeignKey(Department, null=True, blank=True)
 	designation = models.CharField(max_length=100, null=True, blank=True)
+	bio = models.TextField(null=True, blank=True)
+	date_joined = models.DateField(null=True, blank=True)
 	updated = models.DateTimeField(auto_now=True)
 
 class Link(models.Model):

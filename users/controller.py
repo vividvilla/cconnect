@@ -35,4 +35,10 @@ class UserController:
 			department = Department.objects.filter(id=data.get('department'))[0]
 			profile.department = department
 
+		if data.get('bio'):
+			profile.bio = data.get('bio')
+
+		if data.get('date_joined'):
+			profile.date_joined = data.get('date_joined')
+
 		profile.save()

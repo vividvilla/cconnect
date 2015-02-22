@@ -117,6 +117,12 @@ header {
 	color: #999;
 }
 
+.user-phones ul,
+.user-links ul {
+	list-style: none;
+	margin-left: 10px;
+}
+
 .forms label .error {
 	font-size: 10px;
 }
@@ -138,4 +144,36 @@ header {
 	text-transform: uppercase;
 	font-size: 12px;
 	font-weight: 400;
+}
+
+.picker select {
+	display: inline-block !important;
+}
+
+.picker,
+.picker__table td,
+.picker__table th {
+	border: none;
+	text-align: center;
+	font-size: 14px;
+}
+
+.jconfirm.white .jconfirm-box {
+	min-width: 250px;
+	max-width: 400px;
+	margin: 0 auto;
+	font-size: 12px;
+}
+
+.jconfirm .jconfirm-box div.title {
+	font-size: 14px;
+	text-transform: uppercase;
+}
+
+.jconfirm.white .jconfirm-box .buttons button {
+	font-size: 10px;
+}
+
+.jconfirm.white .jconfirm-box .buttons button.btn-outline {
+	color: #333;
 }

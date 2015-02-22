@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 
 from django.http import HttpResponse
 
-from forms import UserBasicProfileForm, UserCompanyInfoForm, \
+from forms import UserBasicProfileForm, UserProfileForm, \
 	UserLinksForm, UserPhoneForm
 from controller import UserController
 
@@ -41,13 +41,15 @@ def edit_profile(request):
 		})
 
 	if hasattr(user, 'profile'):
-		company_info_form = UserCompanyInfoForm(initial={
+		profile_form = UserProfileForm(initial={
 			'personal_email': user.profile.personal_email,
 			'designation': user.profile.designation,
-			'department': user.profile.department
+			'department': user.profile.department,
+			'bio': user.profile.bio,
+			'date_joined': user.profile.date_joined
 		})
 	else:
-		company_info_form = UserCompanyInfoForm()
+		profile_form = UserProfileForm()
 
 	add_link_form = UserLinksForm()
 	user_links = user.link_set.all()
@@ -61,10 +63,10 @@ def edit_profile(request):
 			success = True
 			controller.update_profile(request.POST)
 
-	if 'company_info_form' in request.POST:
-		anchor = '#company-profile'
-		company_info_form = UserCompanyInfoForm(request.POST)
-		if company_info_form.is_valid():
+	if 'profile_form' in request.POST:
+		anchor = '#other-profile'
+		profile_form = UserProfileForm(request.POST)
+		if profile_form.is_valid():
 			success = True
 			controller.update_company_info(request.POST)
 
@@ -84,7 +86,7 @@ def edit_profile(request):
 
 	return render(request, 'users/edit_profile.html', {
 		'basic_profile_form' : basic_profile_form,
-		'company_info_form' : company_info_form,
+		'profile_form' : profile_form,
 		'add_link_form' : add_link_form,
 		'add_phone_form' : add_phone_form,
 		'user' : user,
@@ -93,6 +95,32 @@ def edit_profile(request):
 		'anchor' : anchor,
 		'success' : success
 	})
+
+@login_required
+def delete_profile_data(request):
+	data_type = request.GET.get('data-type', '')
+	data_id = request.GET.get('data-id', '')
+
+	print data_type, data_id
+	forbidden_resource = True
+	items = []
+
+	if data_type == 'link':
+		items = request.user.link_set.all()
+	elif data_type == 'phone':
+		items = request.user.phone_set.all()
+
+	print items
+	for item in items:
+		print item.id, data_id, type(item.id), type(data_id)
+		if item.id == int(data_id):
+			forbidden_resource = False
+			item.delete()
+
+	if forbidden_resource:
+		return HttpResponse(status=403)
+	else:
+		return HttpResponse(status=204)
 
 @login_required
 def signout(request):

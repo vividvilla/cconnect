@@ -1,6 +1,10 @@
 {% extends "base.html" %}
+{% block header %}
+	{% load staticfiles%}
+	<link rel="stylesheet" href="{% static "css/datepicker.css" %}" />
+	<link rel="stylesheet" href="{% static "css/datepicker.date.css" %}" />
+{% endblock %}
 {% block body-class %}edit-profile{% endblock %}
-
 {% block content %}
 	{% load widget_tweaks %}
 	{% if success %}
@@ -11,7 +15,7 @@
 	<nav class="nav-tabs" data-tools="tabs" data-equals="true">
 			<ul>
 					<li class="basic-profile"><a href="#basic-profile">Basic-profile</a></li>
-					<li class="company-profile"><a href="#company-profile">Company info</a></li>
+					<li class="other-profile"><a href="#other-profile">Other info</a></li>
 					<li class="social-links"><a href="#social-links">Links</a></li>
 					<li class="phone-no"><a href="#phone-no">Phone</a></li>
 			</ul>
@@ -44,34 +48,42 @@
 			<button class="btn btn-blue" type="submit" name="basic_profile_form" />Update</button>
 		</form>
 	</div>
-	<div id="company-profile">
+	<div id="other-profile">
 		<form action="." method="POST" class="forms">
 			{% csrf_token %}
-			{{ company_info_form.non_field_errors }}
+			{{ profile_form.non_field_errors }}
 				{% with WIDGET_ERROR_CLASS='input-error' %}
 					<label>
-						{{ company_info_form.personal_email.label }} <span class="error">{{ company_info_form.personal_email.errors | join:", " }}</span>
-						{% render_field company_info_form.personal_email class="width-50" %}
+						{{ profile_form.personal_email.label }} <span class="error">{{ profile_form.personal_email.errors | join:", " }}</span>
+						{% render_field profile_form.personal_email class="width-50" %}
 					</label>
 					<label>
-						{{ company_info_form.designation.label }} <span class="error">{{ company_info_form.designation.errors | join:", " }}</span>
-						{% render_field company_info_form.designation class="width-50" %}
+						{{ profile_form.designation.label }} <span class="error">{{ profile_form.designation.errors | join:", " }}</span>
+						{% render_field profile_form.designation class="width-50" %}
 					</label>
 					<label>
-						{{ company_info_form.department.label }} <span class="error">{{ company_info_form.department.errors | join:", " }}</span>
-						{% render_field company_info_form.department class="width-50" %}
+						{{ profile_form.department.label }} <span class="error">{{ profile_form.department.errors | join:", " }}</span>
+						{% render_field profile_form.department class="width-50" %}
+					</label>
+					<label>
+						{{ profile_form.bio.label }} <span class="error">{{ profile_form.bio.errors | join:", " }}</span>
+						{% render_field profile_form.bio class="width-50" %}
+					</label>
+					<label>
+						{{ profile_form.date_joined.label }} <span class="error">{{ profile_form.date_joined.errors | join:", " }}</span>
+						{% render_field profile_form.date_joined class="width-50 date-joined" %}
 					</label>
 				{% endwith %}
-				<button class="btn btn-blue" type="submit" name="company_info_form" />Update</button>
+				<button class="btn btn-blue" type="submit" name="profile_form" />Update</button>
 		</form>
 	</div>
 	<div id="social-links">
 		<div class="user-links">
-			<ul>
 			<h4>Current links</h4>
+			<ul>
 			{% for link in links %}
 				<li>
-					<a class="{{ link.name }}" href="{{ link.url }}">{{ link.name }} <span class="smaller url">({{ link.url }})</span></a>
+					<a class="{{ link.name }}" href="{{ link.url }}">{{ link.name }} <span class="smaller url">({{ link.url }})</span></a> <a href="#social-links" class="smaller delete" data-type="link" data-id="{{ link.id }}">[delete]</a>
 				</li>
 			{% endfor %}
 			</ul>
@@ -110,7 +122,7 @@
 			<ul>
 			{% for phone in phones %}
 				<li>
-					{{ phone.phone }}
+					{{ phone.phone }} <a href="#phone-no" class="url smaller delete" data-type="phone" data-id="{{ phone.id }}">[delete]</a>
 				</li>
 			{% endfor %}
 			</ul>
@@ -128,7 +140,7 @@
 						<div class="error">{{ add_phone_form.phone.errors | join:", " }}</div>
 					</label>
 					<label class="unit-10">
-						<button class="btn btn-blue" type="submit" name="add_phone_form" />Add</button>
+						<button class="btn btn-blue" type="submit" name="add_phone_form">Add</button>
 					</label>
 
 					<div class="error">
@@ -139,6 +151,11 @@
 			</form>
 		</div>
 	</div>
+	<div id="pick-joined-date"></div>
+
+	<script src="{% static "js/picker.js" %}"></script>
+	<script src="{% static "js/picker.date.js" %}"></script>
+	<script src="{% static "js/legacy.js" %}"></script>
 
 	<script>
 		$(document).ready(function() {
@@ -147,7 +164,56 @@
 			{% else %}
 				var anchor = 'basic-profile';
 			{% endif %}
+
 			$('.'+anchor).addClass('active');
+
+			$('.date-joined').pickadate({
+				closeOnSelect: true,
+				closeOnClear: true,
+				selectYears: true,
+				selectMonths: true,
+				min: [2010,7,15],
+				max: true,
+				container: "#pick-joined-date",
+				formatSubmit: 'yyyy-mm-dd',
+				format: 'yyyy-mm-dd',
+				hiddenName: true
+			});
+		});
+
+		$('a.delete').on('click', function() {
+			console.log("delete");
+			var dataType = $(this).attr('data-type');
+			var dataId = $(this).attr('data-id');
+
+			$.confirm({
+				backgroundDismiss: true,
+				title: 'Delete',
+				content: 'Do you want to delete the '+dataType+' ?',
+				confirmButtonClass: 'btn-blue btn-smaller',
+				cancelButtonClass: 'btn-outline btn-smaller',
+				confirm: function(){
+					$.ajax({
+						url: "/delete_profile_data",
+						type:"get",
+						data: {
+							"data-type": dataType,
+							"data-id": dataId
+						},
+						success: function(response) {
+							alert("deleted")
+							//Do Something
+						},
+						error: function(xhr) {
+							alert("error")
+							//Do Something to handle error
+						}
+					});
+				},
+				cancel: function(){
+						alert('the user clicked cancel')
+				}
+			});
 		});
 	</script>
 {% endblock %}

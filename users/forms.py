@@ -9,10 +9,13 @@ class UserBasicProfileForm(forms.Form):
 		validators=[RegexValidator(regex="^(?=.{3,30}$)[a-zA-Z0-9'._-]+$",
 		message='Invalid username', code='Invalid username')])
 
-class UserCompanyInfoForm(forms.Form):
+class UserProfileForm(forms.Form):
 	personal_email = forms.EmailField(label="Personal email", required=False)
 	designation = forms.CharField(label="Designation", required=False)
 	department = forms.ModelChoiceField(queryset=Department.objects.all(), required=False)
+	bio = forms.CharField(label="Bio", required=False,
+		widget=forms.Textarea(attrs={'cols': 80, 'rows': 10}))
+	date_joined = forms.DateField(label="Date joined", required=False)
 
 class UserLinksForm(forms.Form):
 	name = forms.CharField(label="Name")
