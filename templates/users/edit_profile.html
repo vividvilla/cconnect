@@ -80,15 +80,16 @@
 	<div id="social-links">
 		<div class="user-links">
 			<h4>Current links</h4>
-			<ul>
-			{% for link in links %}
-				<li>
-					<a class="{{ link.name }}" href="{{ link.url }}">{{ link.name }} <span class="smaller url">({{ link.url }})</span></a> <a href="#social-links" class="smaller delete" data-type="link" data-id="{{ link.id }}">[delete]</a>
-				</li>
-			{% endfor %}
-			</ul>
 			{% if not links %}
-				No links added yet
+				<p>No links added yet</p>
+			{% else %}
+				<ul>
+				{% for link in links %}
+					<li>
+						<a class="{{ link.name }}" href="{{ link.url }}">{{ link.name }} <span class="smaller url">({{ link.url }})</span></a> <a href="#social-links" class="smaller delete" data-type="link" data-id="{{ link.id }}">[delete]</a>
+					</li>
+				{% endfor %}
+				</ul>
 			{% endif %}
 
 			<form class="forms units-row add-links" action="." method="POST">
@@ -97,8 +98,19 @@
 				<fieldset>
 					<legend>Add link</legend>
 					<label>
+						Type
+						<select name="link-type" class="width-50 link-type">
+							<option value="Facebook">Facebook</option>
+							<option value="Twitter">Twitter</option>
+							<option value="Instagram">Instagram</option>
+							<option value="Linkedin">Linkedin</option>
+							<option value="Blog">Blog</option>
+							<option value="others">others</option>
+						</select>
+					</label>
+					<label>
 						Name <span class="error">{{ add_link_form.name.errors | join:", " }}</span>
-						{% render_field add_link_form.name class="width-100" %}
+						{% render_field add_link_form.name class="width-100 link-name" %}
 					</label>
 					<label>
 						URL <span class="error">{{ add_link_form.url.errors | join:", " }}</span>
@@ -119,15 +131,16 @@
 	<div id="phone-no">
 		<div class="user-phones">
 			<h4>Current phone numbers</h4>
-			<ul>
-			{% for phone in phones %}
-				<li>
-					{{ phone.phone }} <a href="#phone-no" class="url smaller delete" data-type="phone" data-id="{{ phone.id }}">[delete]</a>
-				</li>
-			{% endfor %}
-			</ul>
 			{% if not phones %}
-				No phone no. added yet
+				<p>No phone no. added yet</p>
+			{% else %}
+				<ul>
+				{% for phone in phones %}
+					<li>
+						{{ phone.phone }} <a href="#phone-no" class="url smaller delete" data-type="phone" data-id="{{ phone.id }}">[delete]</a>
+					</li>
+				{% endfor %}
+				</ul>
 			{% endif %}
 
 			<form class="forms units-row add-phones" action="." method="POST">
@@ -159,12 +172,12 @@
 
 	<script>
 		$(document).ready(function() {
+
 			{% if anchor %}
 				var anchor = '{{ anchor }}'.slice(1);
 			{% else %}
 				var anchor = 'basic-profile';
 			{% endif %}
-
 			$('.'+anchor).addClass('active');
 
 			$('.date-joined').pickadate({
@@ -181,8 +194,23 @@
 			});
 		});
 
+		$('.link-type').change(function() {
+			linkSelectType();
+		})
+
+		function linkSelectType() {
+			var linkType = $('.link-type').val();
+			if(linkType === 'others') {
+				$('.link-name').removeAttr('disabled');
+				$('.link-name').attr('value','');
+			} else {
+				$('.link-name').attr('value', $('.link-type').val());
+				$('.link-name').attr('disabled', 'true');
+			}
+		}
+		linkSelectType();
+
 		$('a.delete').on('click', function() {
-			console.log("delete");
 			var dataType = $(this).attr('data-type');
 			var dataId = $(this).attr('data-id');
 
@@ -201,8 +229,14 @@
 							"data-id": dataId
 						},
 						success: function(response) {
-							alert("deleted")
-							//Do Something
+							$.alert({
+									title: 'Success',
+									content: 'Successfully deleted the content.',
+									confirmButtonClass: 'btn-green btn-smaller',
+									confirm: function() {
+										location.reload();
+									}
+							});
 						},
 						error: function(xhr) {
 							alert("error")

@@ -8,10 +8,12 @@ from forms import UserBasicProfileForm, UserProfileForm, \
 	UserLinksForm, UserPhoneForm
 from controller import UserController
 
+
 def index(request):
 	if request.user.is_authenticated():
 		return redirect('home')
 	return render(request, 'users/index.html')
+
 
 @login_required
 def home(request):
@@ -22,9 +24,11 @@ def home(request):
 		}
 	)
 
+
 @login_required
 def profile(request):
 	return HttpResponse('welcome')
+
 
 @login_required
 def edit_profile(request):
@@ -34,11 +38,10 @@ def edit_profile(request):
 	success = False
 
 	basic_profile_form = UserBasicProfileForm(initial={
-			'username': user.username,
-			'email': user.email,
-			'first_name': user.first_name,
-			'last_name': user.last_name
-		})
+		'username': user.username,
+		'email': user.email,
+		'first_name': user.first_name,
+		'last_name': user.last_name})
 
 	if hasattr(user, 'profile'):
 		profile_form = UserProfileForm(initial={
@@ -85,16 +88,17 @@ def edit_profile(request):
 			controller.add_phone(request.POST)
 
 	return render(request, 'users/edit_profile.html', {
-		'basic_profile_form' : basic_profile_form,
-		'profile_form' : profile_form,
-		'add_link_form' : add_link_form,
-		'add_phone_form' : add_phone_form,
-		'user' : user,
-		'links' : user_links,
-		'phones' : user_phones,
-		'anchor' : anchor,
-		'success' : success
+		'basic_profile_form': basic_profile_form,
+		'profile_form': profile_form,
+		'add_link_form': add_link_form,
+		'add_phone_form': add_phone_form,
+		'user': user,
+		'links': user_links,
+		'phones': user_phones,
+		'anchor': anchor,
+		'success': success
 	})
+
 
 @login_required
 def delete_profile_data(request):
@@ -122,10 +126,12 @@ def delete_profile_data(request):
 	else:
 		return HttpResponse(status=204)
 
+
 @login_required
 def signout(request):
 	logout(request)
 	return redirect('index')
+
 
 def auth_error(request):
 	return render(request, 'auth_error.html')

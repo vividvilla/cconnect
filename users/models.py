@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.core.validators import RegexValidator
+
 
 class Department(models.Model):
 	name = models.CharField(max_length=100)
@@ -9,6 +9,7 @@ class Department(models.Model):
 
 	def __unicode__(self):
 		return self.name
+
 
 class Profile(models.Model):
 	user = models.OneToOneField(User, primary_key=True)
@@ -20,15 +21,17 @@ class Profile(models.Model):
 	date_joined = models.DateField(null=True, blank=True)
 	updated = models.DateTimeField(auto_now=True)
 
+
 class Link(models.Model):
 	user = models.ForeignKey(User)
 	name = models.CharField(max_length=20)
 	url = models.URLField()
-	created = models.DateTimeField(auto_now_add = True)
-	updated = models.DateTimeField(auto_now = True)
+	created = models.DateTimeField(auto_now_add=True)
+	updated = models.DateTimeField(auto_now=True)
+
 
 class Phone(models.Model):
 	user = models.ForeignKey(User)
 	phone = models.CharField(max_length=10)
-	created = models.DateTimeField(auto_now_add = True)
-	updated = models.DateTimeField(auto_now = True)
+	created = models.DateTimeField(auto_now_add=True)
+	updated = models.DateTimeField(auto_now=True)
