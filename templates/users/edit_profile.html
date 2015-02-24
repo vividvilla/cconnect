@@ -79,35 +79,24 @@
 	</div>
 	<div id="social-links">
 		<div class="user-links">
-			<h4>Current links</h4>
-			{% if not links %}
-				<p>No links added yet</p>
-			{% else %}
-				<ul>
-				{% for link in links %}
-					<li>
-						<a class="{{ link.name }}" href="{{ link.url }}">{{ link.name }} <span class="smaller url">({{ link.url }})</span></a> <a href="#social-links" class="smaller delete" data-type="link" data-id="{{ link.id }}">[delete]</a>
-					</li>
-				{% endfor %}
-				</ul>
-			{% endif %}
-
 			<form class="forms units-row add-links" action="." method="POST">
+				<label>Current links</label>
+				{% if not links %}
+					<p>No links added yet</p>
+				{% else %}
+					<ul>
+					{% for link in links %}
+						<li>
+							<a data-name="{{ link.name }}" class="user-link" href="{{ link.url }}">{{ link.name }} <span class="smaller url">({{ link.url }})</span></a> <a href="#social-links" class="smaller delete" data-type="link" data-id="{{ link.id }}">[delete]</a>
+						</li>
+					{% endfor %}
+					</ul>
+				{% endif %}
+
 				{% csrf_token %}
 				{% with WIDGET_ERROR_CLASS='input-error' %}
 				<fieldset>
 					<legend>Add link</legend>
-					<label>
-						Type
-						<select name="link-type" class="width-50 link-type">
-							<option value="Facebook">Facebook</option>
-							<option value="Twitter">Twitter</option>
-							<option value="Instagram">Instagram</option>
-							<option value="Linkedin">Linkedin</option>
-							<option value="Blog">Blog</option>
-							<option value="others">others</option>
-						</select>
-					</label>
 					<label>
 						Name <span class="error">{{ add_link_form.name.errors | join:", " }}</span>
 						{% render_field add_link_form.name class="width-100 link-name" %}
@@ -130,26 +119,26 @@
 	</div>
 	<div id="phone-no">
 		<div class="user-phones">
-			<h4>Current phone numbers</h4>
-			{% if not phones %}
-				<p>No phone no. added yet</p>
-			{% else %}
-				<ul>
-				{% for phone in phones %}
-					<li>
-						{{ phone.phone }} <a href="#phone-no" class="url smaller delete" data-type="phone" data-id="{{ phone.id }}">[delete]</a>
-					</li>
-				{% endfor %}
-				</ul>
-			{% endif %}
-
 			<form class="forms units-row add-phones" action="." method="POST">
+				<label>Current phone numbers</label>
+				{% if not phones %}
+					<p>No phone no. added yet</p>
+				{% else %}
+					<ul>
+					{% for phone in phones %}
+						<li>
+							{{ phone.phone }} <a href="#phone-no" class="url smaller delete" data-type="phone" data-id="{{ phone.id }}">[delete]</a>
+						</li>
+					{% endfor %}
+					</ul>
+				{% endif %}
+
 				{% csrf_token %}
 				{% with WIDGET_ERROR_CLASS='input-error' %}
 				<fieldset>
 					<legend>Add Phone number</legend>
 					<label class="unit-90">
-						{% render_field add_phone_form.phone class="width-90" placeholder=add_phone_form.phone.label%}
+						{% render_field add_phone_form.phone class="width-90" %}
 						<div class="error">{{ add_phone_form.phone.errors | join:", " }}</div>
 					</label>
 					<label class="unit-10">
@@ -173,6 +162,7 @@
 	<script>
 		$(document).ready(function() {
 
+			// Load active tab from url
 			{% if anchor %}
 				var anchor = '{{ anchor }}'.slice(1);
 			{% else %}
@@ -180,6 +170,7 @@
 			{% endif %}
 			$('.'+anchor).addClass('active');
 
+			// Date picker for joined date
 			$('.date-joined').pickadate({
 				closeOnSelect: true,
 				closeOnClear: true,
@@ -194,22 +185,10 @@
 			});
 		});
 
-		$('.link-type').change(function() {
-			linkSelectType();
-		})
+		// Add class to user links
+		updateLinkClass(links = $('.user-link'));
 
-		function linkSelectType() {
-			var linkType = $('.link-type').val();
-			if(linkType === 'others') {
-				$('.link-name').removeAttr('disabled');
-				$('.link-name').attr('value','');
-			} else {
-				$('.link-name').attr('value', $('.link-type').val());
-				$('.link-name').attr('disabled', 'true');
-			}
-		}
-		linkSelectType();
-
+		// Links and phone no delete confirmation and AJAX call
 		$('a.delete').on('click', function() {
 			var dataType = $(this).attr('data-type');
 			var dataId = $(this).attr('data-id');
@@ -233,6 +212,7 @@
 									title: 'Success',
 									content: 'Successfully deleted the content.',
 									confirmButtonClass: 'btn-green btn-smaller',
+									autoClose: 'confirm|2000',
 									confirm: function() {
 										location.reload();
 									}
@@ -240,13 +220,10 @@
 						},
 						error: function(xhr) {
 							alert("error")
-							//Do Something to handle error
 						}
 					});
 				},
-				cancel: function(){
-						alert('the user clicked cancel')
-				}
+				cancel: function(){}
 			});
 		});
 	</script>

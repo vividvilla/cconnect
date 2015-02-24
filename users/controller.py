@@ -20,9 +20,11 @@ class UserController:
 		self.user.save()
 
 	def update_company_info(self, data):
-		profile = Profile()
-		profile.user = self.user
-		print data.get('department')
+		try:
+			profile = self.user.profile
+		except Profile.DoesNotExist:
+			profile = Profile()
+			profile.user = self.user
 
 		if data.get('personal_email'):
 			profile.personal_email = data.get('personal_email')
