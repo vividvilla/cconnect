@@ -7,29 +7,34 @@
 			{% if user.profile.avatar %}
 				<img src="{{ user.profile.avatar }}">
 			{% else %}
-				<img src="{% static "img/default-avatar" %}">
+				<img src="{% static "img/default-avatar.png" %}">
 			{% endif %}
 		</div>
 		<div class="info units-row end">
-			<div class="basic-info unit-50">
-				<h2>{{ user.get_full_name }}</h2>
-				<div class="full-designation">
-					{% if user.profile.designation %}
-						<span class="designation">{{ user.profile.designation }}</span>
-					{% if user.profile.department %}
-						<span class="department">, {{ user.profile.department }}</span>
-					{% endif %}
-				</div>
+			<div class="basic-info unit-40">
+				<h1>{{ user.get_full_name }}</h1>
+				{% if not user.profile.designation and not user.profile.department %}
+					No info added yet.
+				{% endif %}
+				{% if user.profile.designation %}
+					<div class="full-designation">
+						{% if user.profile.designation %}
+							<span class="designation">{{ user.profile.designation }}</span>
+						{% endif %}
+						{% if user.profile.department %}
+							<span class="department">, {{ user.profile.department.name }}</span>
+						{% endif %}
+					</div>
 				{% endif %}
 				{% if user.profile.date_joined %}
 					<div class="joined-date smaller">Joined on {{ user.profile.date_joined | date:"N Y" }}</div>
 				{% endif %}
 			</div>
-			<div class="secondary-info unit-50">
+			<div class="secondary-info unit-40">
 				<div class="follow">Follow this person</div>
-				<div class="primary-email">Official Email {{ user.email }}</div>
+				<div class="primary-email">Official Email  <span>{{ user.email }}</span></div>
 				{% if user.profile.personal_email %}
-					<div class="personal-email">Personal Email {{ user.profile.personal_email }}</div>
+					<div class="personal-email">Personal Email  <span>{{ user.profile.personal_email }}</span></div>
 				{% endif %}
 			</div>
 		</div>

@@ -1,6 +1,7 @@
 body,
 html {
 	font-family: 'Open Sans', sans-serif;
+	font-size: 16px;
 }
 
 h1,
@@ -23,16 +24,15 @@ ul, ol {
 }
 
 legend {
-	font-size: 12px;
+	font-size: 0.75em;
 	color: #999;
 	text-transform: uppercase;
 }
 
 .forms label {
-	/*color: #184377;*/
 	color: #999;
 	text-transform: uppercase;
-	font-size: 12px;
+	font-size: 0.75em;
 }
 
 .outer {
@@ -67,11 +67,16 @@ legend {
 	margin-right: 10px;
 }
 
+.wrap {
+	max-width: 1024px;
+	margin: 0 auto;
+}
+
 /* Header */
 
 header {
 	background: #1d508d;
-	padding: 5px 40px;
+	padding: 5px 0;
 	color: #fff;
 }
 
@@ -89,7 +94,7 @@ header {
 .primary-nav a {
 	color: #bccee3;
 	text-transform: uppercase;
-	font-size: 12px;
+	font-size: 0.75em;
 }
 
 .primary-nav a:hover {
@@ -124,7 +129,7 @@ header {
 }
 
 .forms label .error {
-	font-size: 10px;
+	font-size: 0.625em;
 }
 
 .nav-tabs li.active a,
@@ -142,7 +147,7 @@ header {
 
 .nav-tabs a {
 	text-transform: uppercase;
-	font-size: 12px;
+	font-size: 0.75em;
 	font-weight: 400;
 }
 
@@ -183,6 +188,7 @@ header {
 .profile .profile-head {
 	background: #f1f1f1;
 	color: #999;
+	font-size: 0.75em;
 }
 
 .profile .profile-picture {
@@ -193,21 +199,28 @@ header {
 	width: 150px;
 }
 
-.profile h2 {
+.profile h1 {
 	color: #000;
 	font-weight: 200;
 }
 
 .profile .info {
-	padding: 20px 0;
+	margin-left: 165px;
 }
 
-.profile .basic-info {
-	width: 400px;
+.profile .basic-info,
+.profile .secondary-info {
+	padding: 15px 0;
 }
 
 .profile .full-designation,
 .profile .follow {
 	text-transform: uppercase;
 	font-size: 12px;
+}
+
+.profile .primary-email span,
+.profile .personal-email span {
+	color: #1d508d;
+	margin-left: 5px;
 }

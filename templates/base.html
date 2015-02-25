@@ -22,20 +22,24 @@
 </head>
 <body class="{% block body-class %}{% endblock %}" onload="{% block body-load %}{% endblock %}">
 	<header class="units-row end">
-		<div class="site-title">
-			CC
+		<div class="wrap">
+			<div class="site-title">
+				CC
+			</div>
+			<nav class="primary-nav navbar nav-fullwidth">
+				<ul>
+					<li><a href="/home">Home</a></li>
+					<li><a href="/profile">Profile</a></li>
+					<li><a href="/edit_profile">Edit</a></li>
+					<li><a href="/logout">logout</a></li>
+				</ul>
+			</nav>
 		</div>
-		<nav class="primary-nav navbar nav-fullwidth">
-			<ul>
-				<li><a href="/home">Home</a></li>
-				<li><a href="/profile">Profile</a></li>
-				<li><a href="/edit_profile">Edit</a></li>
-				<li><a href="/logout">logout</a></li>
-			</ul>
-		</nav>
 	</header>
 	<div class="main">
-		{% block content %}{% endblock %}
+		<div class="wrap">
+			{% block content %}{% endblock %}
+		</div>
 	</div>
 </body>
 </html>
