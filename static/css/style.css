@@ -100,7 +100,7 @@ header {
 /* Main */
 
 .main {
-	padding: 20px 40px;
+	/*padding: 20px 40px;*/
 }
 
 .add-phones label {
@@ -176,4 +176,38 @@ header {
 
 .jconfirm.white .jconfirm-box .buttons button.btn-outline {
 	color: #333;
+}
+
+/* Profile page */
+
+.profile .profile-head {
+	background: #f1f1f1;
+	color: #999;
+}
+
+.profile .profile-picture {
+	margin-right: 15px;
+}
+
+.profile .profile-picture img {
+	width: 150px;
+}
+
+.profile h2 {
+	color: #000;
+	font-weight: 200;
+}
+
+.profile .info {
+	padding: 20px 0;
+}
+
+.profile .basic-info {
+	width: 400px;
+}
+
+.profile .full-designation,
+.profile .follow {
+	text-transform: uppercase;
+	font-size: 12px;
 }

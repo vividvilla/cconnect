@@ -1,4 +1,37 @@
 {% extends "base.html" %}
-{% block body-class %}edit-profile{% endblock %}
+{% block body-class %}profile{% endblock %}
 {% block content %}
+	{% load staticfiles %}
+	<div class="profile-head units-row">
+		<div class="profile-picture left">
+			{% if user.profile.avatar %}
+				<img src="{{ user.profile.avatar }}">
+			{% else %}
+				<img src="{% static "img/default-avatar" %}">
+			{% endif %}
+		</div>
+		<div class="info units-row end">
+			<div class="basic-info unit-50">
+				<h2>{{ user.get_full_name }}</h2>
+				<div class="full-designation">
+					{% if user.profile.designation %}
+						<span class="designation">{{ user.profile.designation }}</span>
+					{% if user.profile.department %}
+						<span class="department">, {{ user.profile.department }}</span>
+					{% endif %}
+				</div>
+				{% endif %}
+				{% if user.profile.date_joined %}
+					<div class="joined-date smaller">Joined on {{ user.profile.date_joined | date:"N Y" }}</div>
+				{% endif %}
+			</div>
+			<div class="secondary-info unit-50">
+				<div class="follow">Follow this person</div>
+				<div class="primary-email">Official Email {{ user.email }}</div>
+				{% if user.profile.personal_email %}
+					<div class="personal-email">Personal Email {{ user.profile.personal_email }}</div>
+				{% endif %}
+			</div>
+		</div>
+	</div>
 {% endblock %}
